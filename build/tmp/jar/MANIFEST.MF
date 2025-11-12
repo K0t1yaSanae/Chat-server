@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: net.kotiyasanae.chatserver.ChatServer
+Implementation-Title: Chat Server
+Implementation-Version: 1.0.0
+
