@@ -3,7 +3,7 @@ package net.kotiyasanae.chatserver.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.kotiyasanae.chatserver.ChatServer;
-import net.kotiyasanae.chatserver.encryption.TestEncryption;
+import net.kotiyasanae.chatserver.encryption.AESEncryption;
 import net.kotiyasanae.chatserver.model.Message;
 import org.eclipse.jetty.websocket.api.Session;
 import org.slf4j.Logger;
@@ -18,11 +18,11 @@ public class ChatService {
     private static final Map<Session, String> userSessions = new ConcurrentHashMap<>();
     private static final ObjectMapper mapper = new ObjectMapper();
     private final CommandService commandService;
-    private final TestEncryption encryptionService;
+    private final AESEncryption encryptionService;
 
     public ChatService() {
         this.commandService = new CommandService(userSessions);
-        this.encryptionService = new TestEncryption();
+        this.encryptionService = new AESEncryption();
     }
 
     public void handleConnect(Session session) throws IOException {
@@ -43,7 +43,7 @@ public class ChatService {
 
             Message leaveMsg = new Message(Message.MessageType.LEAVE,
                     username + " 离开了聊天室", "系统");
-            broadcastMessage(leaveMsg, null); // 这里不需要排除自己，因为已经断开连接了
+            broadcastMessage(leaveMsg); // 这里不需要排除自己，因为已经断开连接了
 
             logger.info(username + " left the chat");
             updateOnlineUsers();
@@ -98,7 +98,7 @@ public class ChatService {
 
         Message joinMsg = new Message(Message.MessageType.JOIN,
                 username + " 加入了聊天室", "系统");
-        broadcastMessage(joinMsg, null); // 广播给所有人，包括自己
+        broadcastMessage(joinMsg); // 广播给所有人，包括自己
 
         updateOnlineUsers();
         logger.info(username + " joined the chat, online users: " + userSessions.size());
@@ -156,7 +156,7 @@ public class ChatService {
     /**
      * 广播消息给所有人（包括自己）
      */
-    private void broadcastMessage(Message message, Session excludeSession) {
+    private void broadcastMessage(Message message) {
         userSessions.forEach((session, username) -> {
             if (session.isOpen()) {
                 try {
@@ -225,17 +225,7 @@ public class ChatService {
                 "当前在线用户 (" + userSessions.size() + "): " + userList, "系统");
 
         // 广播给所有人
-        broadcastMessage(userListMsg, null);
+        broadcastMessage(userListMsg);
     }
 
-    public int getOnlineUsersCount() {
-        return userSessions.size();
-    }
-
-    /**
-     * 获取加密服务实例（供其他组件使用）
-     */
-    public TestEncryption getEncryptionService() {
-        return encryptionService;
-    }
 }
