@@ -18,7 +18,8 @@ public class Jokes {
             "@三角初华：重组crychic是什么意思？你的乐队观念怎么了？你才16岁就搞两个乐队，再这样下去32岁搞4个，64岁搞8个，最后变成章鱼博士",
             "我可是AveMujica的Oblivionis！丰川祥子\uD83D\uDE21！要成为神明的女人\uD83D\uDE21！",
             "太有音乐了李神\uD83D\uDE00\uD83D\uDC4D太有节奏了李神\uD83D\uDE00\uD83D\uDC4D太有投技了李神\uD83D\uDE00\uD83D\uDC4D太有rap了李神\uD83D\uDE00\uD83D\uDC4D太有默认了李神\uD83D\uDE00\uD83D\uDC4D太有战术了李神\uD83D\uDE00\uD83D\uDC4D",
-            "这个丰川祥子不想弹就滚去crychic行不行（不是长崎素世）"
+            "这个丰川祥子不想弹就滚去crychic行不行（不是长崎素世）",
+            "丰川niko打的要急眼了转身一看若叶海参高兴地说全都狙不中"
     };
 
     private static final Random random = new Random();
