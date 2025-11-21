@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.kotiyasanae.chatserver.ChatServer;
 import net.kotiyasanae.chatserver.encryption.AESEncryption;
 import net.kotiyasanae.chatserver.model.Message;
+import net.kotiyasanae.chatserver.util.Calculator;
 import net.kotiyasanae.chatserver.util.Jokes;
 import org.eclipse.jetty.websocket.api.Session;
 import org.slf4j.Logger;
@@ -115,6 +116,22 @@ public class ChatService {
                 String joke = Jokes.getRandomJoke();
                 Message jokeMsg = new Message(Message.MessageType.CHAT, joke, "木柜子笑话");
                 sendMessage(session, jokeMsg);
+                return;
+            }
+
+            // 在 handleChat 方法中
+            if (content.startsWith(".calc ")) {
+                String expression = content.substring(".calc ".length()).trim();
+                String result = Calculator.calculate(expression);
+                Message calcMsg = new Message(Message.MessageType.CHAT, result, "计算器");
+                sendMessage(session, calcMsg);
+                return;
+            }
+
+            if (content.equals(".math")) {
+                String problem = Calculator.generateRandomProblem();
+                Message mathMsg = new Message(Message.MessageType.CHAT, problem, "数学挑战");
+                sendMessage(session, mathMsg);
                 return;
             }
 
