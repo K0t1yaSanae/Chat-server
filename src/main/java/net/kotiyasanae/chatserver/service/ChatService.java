@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.kotiyasanae.chatserver.ChatServer;
 import net.kotiyasanae.chatserver.encryption.AESEncryption;
 import net.kotiyasanae.chatserver.model.Message;
+import net.kotiyasanae.chatserver.util.Jokes;
 import org.eclipse.jetty.websocket.api.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,6 +110,14 @@ public class ChatService {
         if (username != null && message.getContent() != null && !message.getContent().trim().isEmpty()) {
             String content = message.getContent().trim();
 
+            // 检查是否是笑话命令
+            if (content.equals(".joke")) {
+                String joke = Jokes.getRandomJoke();
+                Message jokeMsg = new Message(Message.MessageType.CHAT, joke, "木柜子笑话");
+                sendMessage(session, jokeMsg);
+                return;
+            }
+
             // 检查是否是命令
             if (content.startsWith(".")) {
                 // 先检查是否是加密相关命令
@@ -141,16 +150,15 @@ public class ChatService {
         }
     }
 
-    /**
-     * 判断是否是加密相关命令
-     */
+    // 更新isEncryptionCommand方法，添加笑话命令
     private boolean isEncryptionCommand(String content) {
         return content.startsWith(".setkey ") ||
                 content.equals(".keystatus") ||
                 content.equals(".clearkey") ||
                 content.startsWith(".setserverkey ") ||
                 content.startsWith(".decrypt ") ||
-                content.startsWith(".encrypt ");
+                content.startsWith(".encrypt ") ||
+                content.equals(".joke"); // 添加笑话命令
     }
 
     /**
